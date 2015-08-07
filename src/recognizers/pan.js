@@ -74,5 +74,25 @@ inherit(PanRecognizer, AttrRecognizer, {
         }
 
         this._super.emit.call(this, input);
+    },
+
+    respondsToEvent: function(event) {
+        if (typeof event === 'object' && event.hasOwnProperty('type')) {
+            event = event.type;
+        }
+
+        if (typeof event === 'string') {
+            return event === this.options.event ||
+                   event === (this.options.event + directionStr(DIRECTION_DOWN)) ||
+                   event === (this.options.event + directionStr(DIRECTION_UP)) ||
+                   event === (this.options.event + directionStr(DIRECTION_LEFT)) ||
+                   event === (this.options.event + directionStr(DIRECTION_RIGHT)) ||
+                   event === (this.options.event + stateStr(STATE_BEGAN)) ||
+                   event === (this.options.event + stateStr(STATE_CHANGED)) ||
+                   event === (this.options.event + stateStr(STATE_ENDED)) ||
+                   event === (this.options.event + stateStr(STATE_CANCELLED));
+        } else {
+            return false;
+        }
     }
 });

@@ -26,5 +26,21 @@ inherit(RotateRecognizer, AttrRecognizer, {
     attrTest: function(input) {
         return this._super.attrTest.call(this, input) &&
             (Math.abs(input.rotation) > this.options.threshold || this.state & STATE_BEGAN);
+    },
+
+    respondsToEvent: function(event) {
+        if (typeof event === 'object' && event.hasOwnProperty('type')) {
+            event = event.type;
+        }
+
+        if (typeof event === 'string') {
+            return event === this.options.event ||
+                   event === (this.options.event + stateStr(STATE_BEGAN)) ||
+                   event === (this.options.event + stateStr(STATE_CHANGED)) ||
+                   event === (this.options.event + stateStr(STATE_ENDED)) ||
+                   event === (this.options.event + stateStr(STATE_CANCELLED));
+        } else {
+            return false;
+        }
     }
 });
